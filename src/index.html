@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futurist Minds — Ugo Anomelechi</title>
+<meta name="description" content="Ugo Anomelechi — VP Engineering at Chattermill. AI strategy, platform engineering, and high-performance teams.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --bg-alt:#0f0f17;
+  --cyan:#00e5ff;
+  --blue:#2979ff;
+  --gold:#ffab00;
+  --text:#e0e0e0;
+  --text-muted:#8892a4;
+  --glass:rgba(15,15,23,.72);
+  --glass-border:rgba(255,255,255,.06);
+  --radius:12px;
+  --font-sans:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --gradient-cyan:linear-gradient(135deg,var(--cyan),var(--blue));
+  --gradient-gold:linear-gradient(135deg,var(--gold),#ff6d00);
+  --max-w:1120px;
+  --nav-h:64px;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+canvas#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,4vw,3rem);transition:background .3s,backdrop-filter .3s,box-shadow .3s}
+.nav.scrolled{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--glass-border)}
+.nav-logo{font-family:var(--font-mono);font-size:.95rem;font-weight:500;letter-spacing:-.02em;color:var(--text-muted)}
+.nav-logo span{color:var(--cyan)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.85rem;font-weight:500;color:var(--text-muted);transition:color .2s;letter-spacing:.02em}
+.nav-links a:hover{color:var(--cyan)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:200;background:none;border:none;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:768px){
+  .nav-links{position:fixed;inset:0;background:rgba(10,10,15,.96);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
+  .nav-links.open{opacity:1;pointer-events:auto}
+  .nav-links a{font-size:1.2rem}
+  .hamburger{display:flex}
+}
+
+/* SECTIONS */
+section{position:relative;z-index:1;padding:6rem clamp(1rem,4vw,3rem)}
+.section-inner{max-width:var(--max-w);margin:0 auto}
+.section-label{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:var(--cyan);margin-bottom:.75rem}
+.section-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;line-height:1.15;margin-bottom:1.5rem}
+
+/* FADE-UP */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* HERO */
+.hero{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:var(--nav-h)}
+.hero-moniker{font-family:var(--font-mono);font-size:clamp(.7rem,1.5vw,.9rem);text-transform:uppercase;letter-spacing:.3em;color:var(--cyan);margin-bottom:1.25rem}
+.hero-name{font-size:clamp(2.4rem,7vw,4.5rem);font-weight:700;line-height:1.05;margin-bottom:.5rem}
+.hero-name .gradient{background:var(--gradient-cyan);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-role{font-size:clamp(.95rem,2vw,1.15rem);color:var(--text-muted);font-weight:400;margin-bottom:1rem}
+.hero-tagline{max-width:600px;font-size:clamp(.9rem,1.8vw,1.05rem);color:var(--text-muted);line-height:1.7;margin-bottom:2.5rem}
+.cta{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;border-radius:50px;font-size:.9rem;font-weight:600;transition:transform .2s,box-shadow .2s}
+.cta-primary{background:var(--gradient-cyan);color:var(--bg)}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,229,255,.25)}
+.cta-outline{border:1px solid var(--glass-border);color:var(--text-muted)}
+.cta-outline:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-muted);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;animation:float 2.5s ease-in-out infinite}
+.scroll-indicator .line{width:1px;height:32px;background:linear-gradient(to bottom,var(--cyan),transparent)}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.about-text p{color:var(--text-muted);margin-bottom:1.25rem;font-size:.95rem;line-height:1.8}
+.stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.stat-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:1.5rem;text-align:center;transition:border-color .3s,transform .3s}
+.stat-card:hover{border-color:rgba(0,229,255,.2);transform:translateY(-3px)}
+.stat-value{font-family:var(--font-mono);font-size:1.6rem;font-weight:700;background:var(--gradient-cyan);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.75rem;color:var(--text-muted);margin-top:.35rem;letter-spacing:.04em}
+@media(max-width:768px){
+  .about-grid{grid-template-columns:1fr;gap:2rem}
+}
+
+/* EXPERTISE */
+.expertise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
+.expertise-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:2rem 1.5rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.expertise-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.expertise-card:hover::before{transform:scaleX(1)}
+.expertise-card:hover{border-color:rgba(0,229,255,.15);transform:translateY(-4px)}
+.expertise-icon{width:40px;height:40px;margin-bottom:1rem;color:var(--cyan)}
+.expertise-card h3{font-size:1.05rem;font-weight:600;margin-bottom:.5rem}
+.expertise-card p{font-size:.85rem;color:var(--text-muted);line-height:1.7}
+
+/* SPEAKING */
+.speaking-section{background:var(--bg-alt)}
+.speaking-hero{position:relative;border-radius:var(--radius);overflow:hidden;margin-bottom:2.5rem;aspect-ratio:21/9;max-height:360px}
+.speaking-hero img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
+.speaking-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--bg-alt) 0%,rgba(15,15,23,.4) 40%,rgba(15,15,23,.15) 100%)}
+.speaking-hero .overlay-text{position:absolute;bottom:1.5rem;left:2rem;z-index:2;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;color:var(--cyan);opacity:.8}
+@media(max-width:768px){.speaking-hero{aspect-ratio:16/9;max-height:240px}.speaking-hero .overlay-text{bottom:1rem;left:1rem;font-size:.65rem}}
+.speaking-list{display:flex;flex-direction:column;gap:1.25rem;margin-bottom:2.5rem}
+.speaking-item{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:1.5rem 2rem;transition:border-color .3s}
+.speaking-item:hover{border-color:rgba(0,229,255,.15)}
+.speaking-info h3{font-size:1.05rem;font-weight:600;margin-bottom:.25rem}
+.speaking-info p{font-size:.85rem;color:var(--text-muted)}
+.badge{font-family:var(--font-mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:.35rem .85rem;border-radius:50px;white-space:nowrap}
+.badge-gold{background:rgba(255,171,0,.12);color:var(--gold);border:1px solid rgba(255,171,0,.25)}
+.badge-cyan{background:rgba(0,229,255,.08);color:var(--cyan);border:1px solid rgba(0,229,255,.2)}
+.speaking-cta{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.speaking-cta p{font-size:1rem;font-weight:500}
+@media(max-width:600px){
+  .speaking-item{flex-direction:column;align-items:flex-start;gap:.75rem}
+  .speaking-cta{flex-direction:column;text-align:center}
+}
+
+/* VENTURES */
+.venture-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:2.5rem;position:relative;overflow:hidden;max-width:640px}
+.venture-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-gold)}
+.venture-label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.5rem}
+.venture-card h3{font-size:1.4rem;font-weight:700;margin-bottom:.25rem}
+.venture-card .role{font-size:.85rem;color:var(--text-muted);margin-bottom:1rem}
+.venture-card .desc{font-size:.9rem;color:var(--text-muted);line-height:1.8;margin-bottom:1.5rem}
+.venture-metrics{display:flex;gap:2rem;flex-wrap:wrap}
+.venture-metric .val{font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:var(--gold)}
+.venture-metric .lbl{font-size:.7rem;color:var(--text-muted);margin-top:.15rem;letter-spacing:.04em}
+
+/* CONNECT */
+.connect-section .section-title .gradient{background:var(--gradient-cyan);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.connect-section p{color:var(--text-muted);font-size:1rem;max-width:520px;margin-bottom:2rem;line-height:1.7}
+.connect-buttons{display:flex;gap:1rem;flex-wrap:wrap}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--glass-border);padding:2rem clamp(1rem,4vw,3rem)}
+.footer-inner{max-width:var(--max-w);margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-text{font-size:.8rem;color:var(--text-muted);font-family:var(--font-mono)}
+.footer-socials{display:flex;gap:1.25rem}
+.footer-socials a{color:var(--text-muted);transition:color .2s}
+.footer-socials a:hover{color:var(--cyan)}
+.footer-socials svg{width:18px;height:18px}
+
+/* STAGGER */
+.stagger-1{transition-delay:.1s}
+.stagger-2{transition-delay:.2s}
+.stagger-3{transition-delay:.3s}
+.stagger-4{transition-delay:.4s}
+.stagger-5{transition-delay:.5s}
+
+/* REDUCED MOTION */
+@media(prefers-reduced-motion:reduce){
+  .fade-up{opacity:1;transform:none;transition:none}
+  .scroll-indicator{animation:none}
+  canvas#particles{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">&lt;<span>futurist</span>minds /&gt;</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" class="nav-link">About</a></li>
+    <li><a href="#expertise" class="nav-link">Expertise</a></li>
+    <li><a href="#speaking" class="nav-link">Speaking</a></li>
+    <li><a href="#ventures" class="nav-link">Ventures</a></li>
+    <li><a href="#connect" class="nav-link">Connect</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="section-inner" style="display:flex;flex-direction:column;align-items:center">
+    <p class="hero-moniker fade-up stagger-1">futurist minds</p>
+    <h1 class="hero-name fade-up stagger-2"><span class="gradient">Ugo</span> Anomelechi</h1>
+    <p class="hero-role fade-up stagger-3">VP Engineering at Chattermill</p>
+    <p class="hero-tagline fade-up stagger-4">Building intelligent systems at the intersection of AI strategy, platform engineering, and high-performance teams.</p>
+    <a href="#connect" class="cta cta-primary fade-up stagger-5">Let's Talk</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label fade-up">About</p>
+    <h2 class="section-title fade-up">Engineer. Leader. Builder of futures.</h2>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>Two decades of shipping software that matters. From leading engineering organisations to founding AI products used by hundreds of thousands, I operate at the edge where technology strategy meets execution.</p>
+        <p>Former international sprinter for England. The discipline of elite athletics shapes how I lead: with urgency, precision, and an obsession with the marginal gains that compound into transformational outcomes.</p>
+      </div>
+      <div class="stat-cards fade-up">
+        <div class="stat-card">
+          <div class="stat-value">20+</div>
+          <div class="stat-label">Years in Technology</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">170k+</div>
+          <div class="stat-label">Product Downloads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">ENG</div>
+          <div class="stat-label">International Sprinter</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">AI</div>
+          <div class="stat-label">Strategy &amp; Adoption</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="section-inner">
+    <p class="section-label fade-up">Expertise</p>
+    <h2 class="section-title fade-up">What I do</h2>
+    <div class="expertise-grid">
+      <div class="expertise-card fade-up stagger-1">
+        <svg class="expertise-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.57-3.25 3.92L12 22"/><path d="M8 6a4 4 0 0 1 6.67-2.98"/><circle cx="12" cy="6" r="1"/><path d="M17 12H7"/><path d="M19 16H5"/><path d="M16 20H8"/></svg>
+        <h3>AI Strategy &amp; Agents</h3>
+        <p>Designing agentic AI systems that augment human capability and drive measurable business outcomes.</p>
+      </div>
+      <div class="expertise-card fade-up stagger-2">
+        <svg class="expertise-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M7 8h4"/><path d="M7 12h10"/><path d="M7 16h6"/><circle cx="17" cy="8" r="1.5"/></svg>
+        <h3>Platform Engineering</h3>
+        <p>Building scalable infrastructure and developer platforms that accelerate delivery across the organisation.</p>
+      </div>
+      <div class="expertise-card fade-up stagger-3">
+        <svg class="expertise-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <h3>Engineering Leadership</h3>
+        <p>Scaling high-performing engineering teams through clear vision, psychological safety, and relentless execution.</p>
+      </div>
+      <div class="expertise-card fade-up stagger-4">
+        <svg class="expertise-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <h3>Technical Debt &amp; Modernisation</h3>
+        <p>Strategically eliminating legacy constraints while maintaining velocity and system reliability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKING -->
+<section id="speaking" class="speaking-section">
+  <div class="section-inner">
+    <p class="section-label fade-up">Speaking</p>
+    <h2 class="section-title fade-up">On stage</h2>
+    <div class="speaking-hero fade-up">
+      <img src="speaking.jpg" alt="Ugo Anomelechi speaking at LDX3 by LeadDev" loading="lazy">
+      <span class="overlay-text">LDX3 by LeadDev</span>
+    </div>
+    <div class="speaking-list">
+      <div class="speaking-item fade-up">
+        <div class="speaking-info">
+          <h3>LDX3 2026</h3>
+          <p>Activity Host</p>
+        </div>
+        <span class="badge badge-gold">Upcoming</span>
+      </div>
+      <div class="speaking-item fade-up" id="leaddev-talk-item" style="flex-wrap:wrap">
+        <div class="speaking-info">
+          <h3>LeadDev London 2025</h3>
+          <p>The Sprinter's Leadership Mindset</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <a href="https://www.youtube.com/watch?v=RF8s6mNQpa0" target="_blank" rel="noopener" class="cta cta-outline" style="padding:.45rem 1.2rem;font-size:.8rem" onclick="event.preventDefault();toggleVideo()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:.3rem"><polygon points="5,3 19,12 5,21"/></svg>
+            Watch Talk
+          </a>
+          <span class="badge badge-cyan">Delivered</span>
+        </div>
+      </div>
+      <div id="video-embed" style="display:none;margin:-0.5rem 0 0.75rem;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;max-width:720px;border:1px solid var(--glass-border)">
+        <iframe width="100%" height="100%" src="" data-src="https://www.youtube.com/embed/RF8s6mNQpa0" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="border:0"></iframe>
+      </div>
+    </div>
+    <div class="speaking-cta fade-up">
+      <p>Available for keynotes, motivational speaking, panels, and workshops.</p>
+      <a href="mailto:ugo.ano@gmail.com?subject=Speaking%20Enquiry" class="cta cta-primary">Get in Touch</a>
+    </div>
+    <div style="margin-top:2rem">
+      <p class="section-label fade-up">Topics</p>
+      <div class="expertise-grid" style="margin-top:1rem">
+        <div class="expertise-card fade-up stagger-1">
+          <h3>Engineering Leadership</h3>
+          <p>Building high-performing teams, scaling organisations, and leading through technical complexity.</p>
+        </div>
+        <div class="expertise-card fade-up stagger-2">
+          <h3>AI in Practice</h3>
+          <p>From agentic systems to production AI — real lessons from building and deploying intelligent tools.</p>
+        </div>
+        <div class="expertise-card fade-up stagger-3">
+          <h3>The Athlete's Mindset</h3>
+          <p>How elite athletic discipline translates to leadership: marginal gains, resilience, and performing under pressure.</p>
+        </div>
+        <div class="expertise-card fade-up stagger-4">
+          <h3>Founder's Journey</h3>
+          <p>From side project to 170k+ downloads — lessons in product thinking, perseverance, and shipping what matters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENTURES -->
+<section id="ventures">
+  <div class="section-inner">
+    <p class="section-label fade-up">Ventures</p>
+    <h2 class="section-title fade-up">Side of desk</h2>
+    <div class="venture-card fade-up">
+      <div class="venture-label">Founder</div>
+      <h3>Cyman Digital Butler</h3>
+      <p class="role">AI-Powered Home Automation</p>
+      <p class="desc">An intelligent home automation platform that brings AI-driven orchestration to everyday living. Featured in Forbes.</p>
+      <div class="venture-metrics">
+        <div class="venture-metric">
+          <div class="val">170k+</div>
+          <div class="lbl">Downloads</div>
+        </div>
+        <div class="venture-metric">
+          <div class="val">4.5&#9733;</div>
+          <div class="lbl">Rating</div>
+        </div>
+        <div class="venture-metric">
+          <div class="val">Forbes</div>
+          <div class="lbl">Featured</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECT -->
+<section id="connect" class="connect-section">
+  <div class="section-inner">
+    <p class="section-label fade-up">Connect</p>
+    <h2 class="section-title fade-up">Let's build something <span class="gradient">remarkable</span>.</h2>
+    <p class="fade-up">Open to speaking engagements, AI consulting, advisory conversations, and podcast appearances.</p>
+    <div class="connect-buttons fade-up">
+      <a href="mailto:ugo.ano@gmail.com" class="cta cta-primary">Say Hello</a>
+      <a href="https://instagram.com/futuristmindset" target="_blank" rel="noopener" class="cta cta-outline">@futuristmindset</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-text">futuristminds &mdash; Ugo Anomelechi</span>
+    <div class="footer-socials">
+      <a href="https://instagram.com/futuristmindset" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/ugoanomelechi" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://www.youtube.com/watch?v=RF8s6mNQpa0" target="_blank" rel="noopener" aria-label="YouTube Talk">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.81zM9.75 15.56V8.44L15.5 12l-5.75 3.56z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* Particles */
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('particles');
+  if(!prefersReduced && canvas){
+    var ctx = canvas.getContext('2d');
+    var w, h, particles = [], mouse = {x: -9999, y: -9999};
+    var COUNT = 80, CONNECT_DIST = 140;
+
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    document.addEventListener('mousemove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
+    document.addEventListener('mouseleave', function(){ mouse.x = -9999; mouse.y = -9999; });
+
+    for(var i = 0; i < COUNT; i++){
+      particles.push({
+        x: Math.random() * (w || window.innerWidth),
+        y: Math.random() * (h || window.innerHeight),
+        vx: (Math.random() - .5) * .4,
+        vy: (Math.random() - .5) * .4,
+        r: Math.random() * 1.5 + .5
+      });
+    }
+
+    function draw(){
+      ctx.clearRect(0, 0, w, h);
+      for(var i = 0; i < particles.length; i++){
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < 0) p.x = w; if(p.x > w) p.x = 0;
+        if(p.y < 0) p.y = h; if(p.y > h) p.y = 0;
+
+        var dx = p.x - mouse.x, dy = p.y - mouse.y;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < 120){
+          var force = (120 - dist) / 120 * .8;
+          p.x += dx / dist * force;
+          p.y += dy / dist * force;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,229,255,.35)';
+        ctx.fill();
+
+        for(var j = i + 1; j < particles.length; j++){
+          var q = particles[j];
+          var ddx = p.x - q.x, ddy = p.y - q.y;
+          var d = Math.sqrt(ddx*ddx + ddy*ddy);
+          if(d < CONNECT_DIST){
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = 'rgba(0,229,255,' + (.12 * (1 - d / CONNECT_DIST)).toFixed(3) + ')';
+            ctx.lineWidth = .5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  /* Video toggle */
+  window.toggleVideo = function(){
+    var embed = document.getElementById('video-embed');
+    var iframe = embed.querySelector('iframe');
+    if(embed.style.display === 'none'){
+      iframe.src = iframe.getAttribute('data-src');
+      embed.style.display = 'block';
+    } else {
+      embed.style.display = 'none';
+      iframe.src = '';
+    }
+  };
+
+  /* Nav scroll */
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, {passive: true});
+
+  /* Hamburger */
+  var hamburger = document.getElementById('hamburger');
+  var navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', function(){
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  var links = navLinks.querySelectorAll('a');
+  for(var i = 0; i < links.length; i++){
+    links[i].addEventListener('click', function(){
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  }
+
+  /* IntersectionObserver fade-up */
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, {threshold: .15, rootMargin: '0px 0px -40px 0px'});
+
+  var fadeEls = document.querySelectorAll('.fade-up');
+  for(var i = 0; i < fadeEls.length; i++){
+    observer.observe(fadeEls[i]);
+  }
+})();
+</script>
+</body>
+</html>
